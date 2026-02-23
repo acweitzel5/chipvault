@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -205,6 +206,21 @@
   .login-btn:disabled { opacity: 0.5; cursor: not-allowed; }
   .login-error { background: rgba(232,126,107,0.1); border: 1px solid rgba(232,126,107,0.3); border-radius: var(--radius-sm); padding: 0.75rem 1rem; color: #e87e6b; font-size: 0.85rem; display: none; }
   .login-error.show { display: block; }
+  .login-success { background: rgba(114,201,122,0.1); border: 1px solid rgba(114,201,122,0.3); border-radius: var(--radius-sm); padding: 0.75rem 1rem; color: #72c97a; font-size: 0.85rem; display: none; margin-bottom: 0.5rem; }
+  .login-success.show { display: block; }
+  /* Auth panel switching */
+  .auth-panel { display: none; }
+  .auth-panel.active { display: block; }
+  .auth-switch-row { display: flex; align-items: center; justify-content: center; gap: 0.4rem; margin-top: 1.25rem; font-size: 0.85rem; color: var(--text-dim); }
+  .auth-link { color: var(--gold-light); background: none; border: none; font-family: 'DM Sans', sans-serif; font-size: 0.85rem; cursor: pointer; padding: 0; text-decoration: underline; text-underline-offset: 2px; }
+  .auth-link:hover { color: var(--gold); }
+  .auth-divider { display: flex; align-items: center; gap: 0.75rem; margin: 0.25rem 0; color: var(--text-dim); font-size: 0.78rem; }
+  .auth-divider::before, .auth-divider::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+  .login-input-hint { font-size: 0.75rem; color: var(--text-dim); margin-top: 2px; }
+  .pw-strength { height: 3px; border-radius: 2px; margin-top: 4px; transition: all 0.2s; background: var(--border); }
+  .pw-strength.weak { background: #e87e6b; width: 33%; }
+  .pw-strength.fair { background: var(--gold-dim); width: 66%; }
+  .pw-strength.strong { background: #72c97a; width: 100%; }
   .user-menu-wrap { position: relative; }
   .user-pill-btn { display: flex; align-items: center; gap: 8px; background: var(--surface2); border: 1px solid var(--border); border-radius: 20px; padding: 4px 10px 4px 4px; cursor: pointer; transition: border-color 0.15s, background 0.15s; }
   .user-pill-btn:hover { background: var(--surface3); border-color: var(--gold-dim); }
@@ -425,18 +441,80 @@
       <div class="login-title">Casino Chip Vault</div>
       <div class="login-subtitle">$1 Chip Registry · Members only</div>
     </div>
-    <div class="login-error" id="loginError"></div>
-    <div class="login-form">
-      <div class="login-field">
-        <label class="login-label">Email</label>
-        <input class="login-input" type="email" id="loginEmail" placeholder="your@email.com" autocomplete="email">
+
+    <!-- ── SIGN IN PANEL ── -->
+    <div class="auth-panel active" id="panelSignIn">
+      <div class="login-error" id="loginError"></div>
+      <div class="login-form">
+        <div class="login-field">
+          <label class="login-label">Email</label>
+          <input class="login-input" type="email" id="loginEmail" placeholder="your@email.com" autocomplete="email" onkeydown="if(event.key==='Enter')doLogin()">
+        </div>
+        <div class="login-field">
+          <label class="login-label">Password</label>
+          <input class="login-input" type="password" id="loginPassword" placeholder="••••••••" autocomplete="current-password" onkeydown="if(event.key==='Enter')doLogin()">
+        </div>
+        <button class="login-btn" id="loginBtn" onclick="doLogin()">Sign In</button>
       </div>
-      <div class="login-field">
-        <label class="login-label">Password</label>
-        <input class="login-input" type="password" id="loginPassword" placeholder="••••••••" autocomplete="current-password">
+      <div class="auth-switch-row">
+        <button class="auth-link" onclick="showAuthPanel('panelForgot')">Forgot password?</button>
       </div>
-      <button class="login-btn" id="loginBtn" onclick="doLogin()">Sign In</button>
+      <div class="auth-divider">or</div>
+      <div class="auth-switch-row" style="margin-top:0">
+        New to Casino Chip Vault?
+        <button class="auth-link" onclick="showAuthPanel('panelSignUp')">Create an account</button>
+      </div>
     </div>
+
+    <!-- ── SIGN UP PANEL ── -->
+    <div class="auth-panel" id="panelSignUp">
+      <div class="login-error" id="signupError"></div>
+      <div class="login-success" id="signupSuccess"></div>
+      <div class="login-form">
+        <div class="login-field">
+          <label class="login-label">Display Name</label>
+          <input class="login-input" type="text" id="signupName" placeholder="e.g. Mark W." autocomplete="name">
+        </div>
+        <div class="login-field">
+          <label class="login-label">Email</label>
+          <input class="login-input" type="email" id="signupEmail" placeholder="your@email.com" autocomplete="email">
+        </div>
+        <div class="login-field">
+          <label class="login-label">Password</label>
+          <input class="login-input" type="password" id="signupPassword" placeholder="At least 8 characters" autocomplete="new-password" oninput="updatePwStrength(this.value)">
+          <div class="pw-strength" id="pwStrength"></div>
+        </div>
+        <div class="login-field">
+          <label class="login-label">Confirm Password</label>
+          <input class="login-input" type="password" id="signupConfirm" placeholder="••••••••" autocomplete="new-password">
+        </div>
+        <button class="login-btn" id="signupBtn" onclick="doSignUp()">Create Account</button>
+      </div>
+      <div class="auth-switch-row">
+        Already have an account?
+        <button class="auth-link" onclick="showAuthPanel('panelSignIn')">Sign in</button>
+      </div>
+    </div>
+
+    <!-- ── FORGOT PASSWORD PANEL ── -->
+    <div class="auth-panel" id="panelForgot">
+      <div class="login-error" id="forgotError"></div>
+      <div class="login-success" id="forgotSuccess"></div>
+      <div style="color:var(--text-dim);font-size:0.85rem;margin-bottom:1rem;line-height:1.5">
+        Enter your email address and we'll send you a link to reset your password.
+      </div>
+      <div class="login-form">
+        <div class="login-field">
+          <label class="login-label">Email</label>
+          <input class="login-input" type="email" id="forgotEmail" placeholder="your@email.com" autocomplete="email" onkeydown="if(event.key==='Enter')doForgotPassword()">
+        </div>
+        <button class="login-btn" id="forgotBtn" onclick="doForgotPassword()">Send Reset Link</button>
+      </div>
+      <div class="auth-switch-row">
+        <button class="auth-link" onclick="showAuthPanel('panelSignIn')">← Back to Sign In</button>
+      </div>
+    </div>
+
   </div>
 </div>
 
@@ -1132,6 +1210,26 @@ let currentUsername = null;
 function showLoginWall() { document.getElementById('loginWall').style.display = 'flex'; }
 function hideLoginWall() { document.getElementById('loginWall').style.display = 'none'; }
 
+// ── AUTH PANEL SWITCHER
+function showAuthPanel(panelId) {
+  document.querySelectorAll('.auth-panel').forEach(p => p.classList.remove('active'));
+  document.getElementById(panelId).classList.add('active');
+  // Clear errors/success on switch
+  document.querySelectorAll('.login-error, .login-success').forEach(el => el.classList.remove('show'));
+}
+
+// ── PASSWORD STRENGTH INDICATOR
+function updatePwStrength(pw) {
+  const bar = document.getElementById('pwStrength');
+  if (!bar) return;
+  bar.className = 'pw-strength';
+  if (!pw) return;
+  if (pw.length < 6) bar.classList.add('weak');
+  else if (pw.length < 10 || !/[^a-zA-Z0-9]/.test(pw)) bar.classList.add('fair');
+  else bar.classList.add('strong');
+}
+
+// ── SIGN IN
 async function doLogin() {
   const email    = document.getElementById('loginEmail').value.trim();
   const password = document.getElementById('loginPassword').value;
@@ -1159,6 +1257,122 @@ async function doLogin() {
   }
 
   await onSignedIn(data.user);
+}
+
+// ── SIGN UP
+async function doSignUp() {
+  const name     = document.getElementById('signupName').value.trim();
+  const email    = document.getElementById('signupEmail').value.trim();
+  const password = document.getElementById('signupPassword').value;
+  const confirm  = document.getElementById('signupConfirm').value;
+  const btn      = document.getElementById('signupBtn');
+  const errDiv   = document.getElementById('signupError');
+  const okDiv    = document.getElementById('signupSuccess');
+
+  errDiv.classList.remove('show');
+  okDiv.classList.remove('show');
+
+  if (!name) {
+    errDiv.textContent = 'Please enter your display name.';
+    errDiv.classList.add('show'); return;
+  }
+  if (!email) {
+    errDiv.textContent = 'Please enter your email address.';
+    errDiv.classList.add('show'); return;
+  }
+  if (password.length < 8) {
+    errDiv.textContent = 'Password must be at least 8 characters.';
+    errDiv.classList.add('show'); return;
+  }
+  if (password !== confirm) {
+    errDiv.textContent = 'Passwords do not match.';
+    errDiv.classList.add('show'); return;
+  }
+
+  btn.disabled = true;
+  btn.textContent = 'Creating account…';
+
+  // Derive a username from the email (part before @, lowercase, no special chars)
+  const username = email.split('@')[0].toLowerCase().replace(/[^a-z0-9_]/g, '_');
+
+  const { data, error } = await sb.auth.signUp({
+    email,
+    password,
+    options: {
+      data: { display_name: name, username }
+    }
+  });
+
+  btn.disabled = false;
+  btn.textContent = 'Create Account';
+
+  if (error) {
+    errDiv.textContent = error.message || 'Sign up failed. Please try again.';
+    errDiv.classList.add('show'); return;
+  }
+
+  // Supabase may require email confirmation — check if session exists
+  if (data.user && !data.session) {
+    // Email confirmation required
+    okDiv.textContent = '✓ Account created! Check your email to confirm your address, then sign in.';
+    okDiv.classList.add('show');
+    // Also try to insert user_profiles row if possible
+    try {
+      await sb.from('user_profiles').insert({
+        id: data.user.id,
+        username,
+        display_name: name,
+        email
+      });
+    } catch(e) { /* Will be created on first sign-in via trigger if configured */ }
+  } else if (data.session) {
+    // Auto-confirmed (email confirmation disabled in Supabase)
+    // Ensure user_profiles row exists
+    try {
+      await sb.from('user_profiles').upsert({
+        id: data.user.id,
+        username,
+        display_name: name,
+        email
+      });
+    } catch(e) { console.warn('user_profiles upsert:', e); }
+    await onSignedIn(data.user);
+  }
+}
+
+// ── FORGOT PASSWORD
+async function doForgotPassword() {
+  const email  = document.getElementById('forgotEmail').value.trim();
+  const btn    = document.getElementById('forgotBtn');
+  const errDiv = document.getElementById('forgotError');
+  const okDiv  = document.getElementById('forgotSuccess');
+
+  errDiv.classList.remove('show');
+  okDiv.classList.remove('show');
+
+  if (!email) {
+    errDiv.textContent = 'Please enter your email address.';
+    errDiv.classList.add('show'); return;
+  }
+
+  btn.disabled = true;
+  btn.textContent = 'Sending…';
+
+  const { error } = await sb.auth.resetPasswordForEmail(email, {
+    redirectTo: window.location.href
+  });
+
+  btn.disabled = false;
+  btn.textContent = 'Send Reset Link';
+
+  if (error) {
+    errDiv.textContent = error.message || 'Could not send reset email. Please try again.';
+    errDiv.classList.add('show'); return;
+  }
+
+  okDiv.textContent = '✓ Reset link sent! Check your inbox (and spam folder).';
+  okDiv.classList.add('show');
+  document.getElementById('forgotEmail').value = '';
 }
 
 async function onSignedIn(user) {
