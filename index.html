@@ -220,6 +220,13 @@
   .pw-strength.weak { background: #e87e6b; width: 33%; }
   .pw-strength.fair { background: var(--gold-dim); width: 66%; }
   .pw-strength.strong { background: #72c97a; width: 100%; }
+
+  /* ── Logout button */
+  .logout-btn { display: flex; align-items: center; gap: 6px; padding: 7px 14px; border-radius: 7px; border: 1px solid rgba(232,126,107,0.35); background: rgba(232,126,107,0.08); color: #e87e6b; font-family: 'DM Sans', sans-serif; font-size: 0.82rem; font-weight: 600; cursor: pointer; transition: all 0.15s; white-space: nowrap; flex-shrink: 0; }
+  .logout-btn:hover { background: rgba(232,126,107,0.18); border-color: rgba(232,126,107,0.6); }
+  .logout-btn svg { flex-shrink: 0; }
+  /* Hide logout btn on mobile (use drawer version instead) */
+  @media (max-width: 768px) { .logout-btn-desktop { display: none; } }
   .user-menu-wrap { position: relative; }
   .user-pill-btn { display: flex; align-items: center; gap: 8px; background: var(--surface2); border: 1px solid var(--border); border-radius: 20px; padding: 4px 10px 4px 4px; cursor: pointer; transition: border-color 0.15s, background 0.15s; }
   .user-pill-btn:hover { background: var(--surface3); border-color: var(--gold-dim); }
@@ -678,6 +685,10 @@
         <div class="db-dot" id="dbDot"></div>
         <span class="db-label" id="dbLabel">Connecting…</span>
       </div>
+      <button class="logout-btn logout-btn-desktop" id="logoutBtnNav" style="display:none" onclick="doLogout()">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+        Sign Out
+      </button>
       <div class="user-menu-wrap" id="userPill" style="display:none">
         <button class="user-pill-btn" onclick="toggleUserMenu()" id="userPillBtn">
           <div class="user-avatar-sm" id="userAvatar"></div>
@@ -719,6 +730,10 @@
   <button class="mobile-nav-item" id="mobileTab-addchip" onclick="mobileShowView('addchip')">＋ Add Chip</button>
   <button class="mobile-nav-item" id="mobileTab-casinos" onclick="mobileShowView('casinos')">🏨 Casinos</button>
   <button class="mobile-nav-item" id="mobileTab-groups" onclick="mobileShowView('groups')">👥 Groups</button>
+  <div class="mobile-nav-divider"></div>
+  <button class="mobile-nav-item" style="color:#e87e6b;background:rgba(232,126,107,0.08);border:1px solid rgba(232,126,107,0.25)" onclick="doLogout()">
+    ⬡ Sign Out
+  </button>
 </div>
 
 <div class="app-container">
@@ -1565,6 +1580,8 @@ async function onSignedIn(user) {
   document.getElementById('userDropdownEmail').textContent = user.email;
 
   document.getElementById('userPill').style.display = 'block';
+  const logoutNav = document.getElementById('logoutBtnNav');
+  if (logoutNav) logoutNav.style.display = 'flex';
 
   // Default context = just me
   activeContext = 'me';
@@ -1794,6 +1811,8 @@ async function doLogout() {
 
   // Close any open UI
   document.getElementById('userPill').style.display = 'none';
+  const logoutNav2 = document.getElementById('logoutBtnNav');
+  if (logoutNav2) logoutNav2.style.display = 'none';
   document.getElementById('userDropdown').classList.remove('open');
   document.getElementById('userChevron').classList.remove('open');
   closeMobileNav();
