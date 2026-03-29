@@ -429,6 +429,145 @@
   .invite-tag button:hover { opacity:1; }
   .pending-invite-row { display:flex; align-items:center; justify-content:space-between; padding:6px 0; font-size:0.82rem; color:var(--text-dim); border-bottom:1px solid var(--border); }
   .pending-invite-row:last-child { border-bottom:none; }
+
+  /* ════════════════════════════════════════════
+     MOBILE RESPONSIVE — breakpoints 768px / 480px
+     ════════════════════════════════════════════ */
+
+  /* ── Hamburger menu button (hidden on desktop) */
+  .hamburger { display: none; flex-direction: column; justify-content: center; gap: 5px; background: none; border: none; cursor: pointer; padding: 6px; border-radius: 6px; flex-shrink: 0; }
+  .hamburger span { display: block; width: 22px; height: 2px; background: var(--text-muted); border-radius: 2px; transition: all 0.2s; }
+  .hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+  .hamburger.open span:nth-child(2) { opacity: 0; }
+  .hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+  /* ── Mobile nav drawer */
+  .mobile-nav-drawer { display: none; position: fixed; inset: 0; top: 0; z-index: 90; background: var(--bg); padding: 1rem; overflow-y: auto; flex-direction: column; gap: 0.5rem; padding-top: 6rem; }
+  .mobile-nav-drawer.open { display: flex; }
+  .mobile-nav-item { display: block; width: 100%; text-align: left; padding: 14px 16px; border-radius: 8px; border: none; background: var(--surface); color: var(--text-muted); font-family: 'DM Sans', sans-serif; font-size: 1rem; font-weight: 500; cursor: pointer; transition: all 0.15s; }
+  .mobile-nav-item:hover, .mobile-nav-item.active { background: rgba(201,168,76,0.1); color: var(--gold-light); }
+  .mobile-nav-divider { height: 1px; background: var(--border); margin: 0.5rem 0; }
+  .mobile-context-select { width: 100%; background: var(--surface2); border: 1px solid var(--border); color: var(--text); padding: 12px 14px; border-radius: 8px; font-family: 'DM Sans', sans-serif; font-size: 0.95rem; margin-bottom: 0.5rem; }
+
+  @media (max-width: 768px) {
+    /* ── Nav: hide tabs, show hamburger */
+    .nav-inner { height: 70px; padding: 0 1rem; gap: 1rem; }
+    .logo-img { height: 52px; width: 52px; }
+    .logo-text { font-size: 1.1rem; }
+    .logo-text span { font-size: 0.62rem; }
+    nav { display: none; }
+    .hamburger { display: flex; }
+    .db-status { display: none; }
+    .nav-right { gap: 0.5rem; margin-left: 0; }
+    /* Context select hidden in nav on mobile (shown in drawer) */
+    #contextSelect { display: none; }
+
+    /* ── App container padding */
+    .app-container { padding: 1rem; }
+
+    /* ── Page header */
+    .page-title { font-size: 1.6rem; }
+    .page-header { margin-bottom: 1.25rem; }
+
+    /* ── Filter bar: stack vertically */
+    .filter-bar { flex-direction: column; align-items: stretch; padding: 1rem; gap: 0.75rem; }
+    .search-wrap { width: 100%; }
+    .search-input { width: 100%; }
+    .filter-group { flex-direction: row; justify-content: space-between; }
+    .filter-select { flex: 1; }
+    .filter-toggles { flex-wrap: wrap; gap: 0.4rem; }
+    .view-controls { justify-content: space-between; width: 100%; }
+
+    /* ── Chip grid: 2 columns on tablet */
+    .chip-grid { grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 0.75rem; }
+
+    /* ── Stats grid */
+    .stats-grid { grid-template-columns: repeat(2, 1fr); gap: 0.75rem; margin-bottom: 1.25rem; }
+    .stat-card { padding: 1rem; }
+    .stat-number { font-size: 1.8rem; }
+
+    /* ── Dashboard owner cards */
+    .owner-collection-grid { grid-template-columns: 1fr !important; }
+
+    /* ── Add chip / casino manager: already single col at 900px, tighten padding */
+    .addchip-layout, .cm-layout { gap: 1rem; }
+    .addchip-form-panel, .cm-form-panel { padding: 1.25rem; }
+    .addchip-image-panel { padding: 1.25rem; }
+
+    /* ── Modal: full screen on mobile */
+    .modal-overlay { align-items: flex-end; padding: 0; }
+    .modal { max-width: 100%; width: 100%; border-radius: 20px 20px 0 0; max-height: 92vh; }
+    .modal-header { padding: 1rem 1.25rem 0.75rem; }
+    .modal-body { padding: 0 1.25rem 1.25rem; }
+
+    /* ── Group modal */
+    .group-modal-overlay { padding: 0; align-items: flex-end; }
+    .group-modal { border-radius: 20px 20px 0 0; max-height: 92vh; }
+
+    /* ── Groups grid */
+    .groups-grid { grid-template-columns: 1fr; }
+
+    /* ── Map: shorter on mobile */
+    #leafletMap { height: 380px !important; }
+    .map-filter-row { flex-wrap: wrap; gap: 0.5rem; }
+    .map-legend { gap: 0.5rem; }
+
+    /* ── Login card */
+    .login-card { padding: 1.5rem 1.25rem; border-radius: 16px; }
+    .login-card img[style*="240px"] { width: 160px !important; height: 160px !important; }
+    .login-title { font-size: 1.8rem; }
+
+    /* ── Casino manager form */
+    .cm-edit-form { gap: 0.75rem; }
+    .cm-field-row { flex-direction: column; gap: 0.75rem; }
+
+    /* ── Add chip image search results */
+    .image-search-results { grid-template-columns: repeat(2, 1fr); }
+
+    /* ── Confirm dialog */
+    .confirm-dialog { margin: 1rem; border-radius: 16px; }
+  }
+
+  @media (max-width: 480px) {
+    /* ── Single column chip grid on phones */
+    .chip-grid { grid-template-columns: repeat(2, 1fr); gap: 0.5rem; }
+    .chip-card { border-radius: 8px; }
+    .chip-img-wrap { height: 120px; }
+
+    /* ── Stats: 2x2 but smaller */
+    .stats-grid { grid-template-columns: repeat(2, 1fr); gap: 0.5rem; }
+    .stat-number { font-size: 1.5rem; }
+
+    /* ── Page title smaller */
+    .page-title { font-size: 1.35rem; }
+
+    /* ── Filter bar tighter */
+    .filter-bar { padding: 0.75rem; gap: 0.6rem; }
+
+    /* ── App container */
+    .app-container { padding: 0.75rem; }
+
+    /* ── Nav height */
+    .nav-inner { height: 60px; }
+    .logo-img { height: 44px; width: 44px; }
+    .logo-text { font-size: 0.95rem; }
+    .logo-text span { display: none; }
+
+    /* ── Map even shorter */
+    #leafletMap { height: 300px !important; }
+
+    /* ── Login */
+    .login-card img[style*="240px"] { width: 120px !important; height: 120px !important; }
+    .login-title { font-size: 1.5rem; }
+
+    /* ── Modals: full height on very small screens */
+    .modal { max-height: 96vh; }
+    .group-modal { max-height: 96vh; }
+
+    /* ── Group cards */
+    .group-card-actions { flex-wrap: wrap; }
+  }
+
 </style>
 </head>
 <body>
@@ -532,6 +671,9 @@
       <button class="nav-tab nav-tab-add" onclick="showView('casinos', this)">🏨 Casinos</button>
       <button class="nav-tab" onclick="showView('groups', this)">👥 Groups</button>
     </nav>
+    <button class="hamburger" id="hamburgerBtn" onclick="toggleMobileNav()" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
     <div class="nav-right">
       <div class="db-status">
         <div class="db-dot" id="dbDot"></div>
@@ -565,6 +707,20 @@
     </div>
   </div>
 </header>
+
+<!-- ── MOBILE NAV DRAWER ── -->
+<div class="mobile-nav-drawer" id="mobileNavDrawer">
+  <select class="mobile-context-select" id="mobileContextSelect" onchange="onMobileContextChange()">
+    <option value="me">👤 My Collection</option>
+  </select>
+  <div class="mobile-nav-divider"></div>
+  <button class="mobile-nav-item active" id="mobileTab-collection" onclick="mobileShowView('collection')">📦 Collection Browser</button>
+  <button class="mobile-nav-item" id="mobileTab-dashboard" onclick="mobileShowView('dashboard')">📊 Collector Dashboard</button>
+  <button class="mobile-nav-item" id="mobileTab-map" onclick="mobileShowView('map')">🗺 Casino Map</button>
+  <button class="mobile-nav-item" id="mobileTab-addchip" onclick="mobileShowView('addchip')">＋ Add Chip</button>
+  <button class="mobile-nav-item" id="mobileTab-casinos" onclick="mobileShowView('casinos')">🏨 Casinos</button>
+  <button class="mobile-nav-item" id="mobileTab-groups" onclick="mobileShowView('groups')">👥 Groups</button>
+</div>
 
 <div class="app-container">
 
@@ -1575,6 +1731,7 @@ function buildContextSelect() {
     sel.appendChild(opt);
   });
   sel.value = activeContext;
+  syncMobileContextSelect();
 }
 
 function onContextChange() {
@@ -3555,6 +3712,81 @@ async function declineInvite(inviteId) {
   buildContextSelect();
 }
 // ── END GROUPS ──────────────────────────────
+
+
+// ════════════════════════════════════════════
+// ── MOBILE NAV
+// ════════════════════════════════════════════
+let mobileNavOpen = false;
+
+function toggleMobileNav() {
+  mobileNavOpen = !mobileNavOpen;
+  const drawer = document.getElementById('mobileNavDrawer');
+  const btn    = document.getElementById('hamburgerBtn');
+  drawer.classList.toggle('open', mobileNavOpen);
+  btn.classList.toggle('open', mobileNavOpen);
+  // Prevent body scroll when drawer open
+  document.body.style.overflow = mobileNavOpen ? 'hidden' : '';
+}
+
+function closeMobileNav() {
+  mobileNavOpen = false;
+  document.getElementById('mobileNavDrawer')?.classList.remove('open');
+  document.getElementById('hamburgerBtn')?.classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+function mobileShowView(view) {
+  // Find the matching desktop nav tab and trigger it
+  const tabs = document.querySelectorAll('.nav-tab');
+  let matched = null;
+  tabs.forEach(t => {
+    if (t.getAttribute('onclick')?.includes("'" + view + "'")) matched = t;
+  });
+  if (matched) showView(view, matched);
+  // Update mobile tab active state
+  document.querySelectorAll('.mobile-nav-item').forEach(b => b.classList.remove('active'));
+  const activeTab = document.getElementById('mobileTab-' + view);
+  if (activeTab) activeTab.classList.add('active');
+  closeMobileNav();
+}
+
+function onMobileContextChange() {
+  const val = document.getElementById('mobileContextSelect').value;
+  // Sync to desktop context select
+  const desktopSel = document.getElementById('contextSelect');
+  if (desktopSel) desktopSel.value = val;
+  onContextChange();
+}
+
+// Keep mobile context select in sync with desktop one
+function syncMobileContextSelect() {
+  const mobile = document.getElementById('mobileContextSelect');
+  if (!mobile) return;
+  mobile.innerHTML = '';
+  const meOpt = document.createElement('option');
+  meOpt.value = 'me';
+  meOpt.textContent = '👤 My Collection';
+  mobile.appendChild(meOpt);
+  MY_GROUPS.forEach(g => {
+    const opt = document.createElement('option');
+    opt.value = g.id;
+    opt.textContent = '👥 ' + g.name;
+    mobile.appendChild(opt);
+  });
+  mobile.value = activeContext;
+}
+
+// Close drawer on outside click or escape
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeMobileNav(); });
+document.addEventListener('click', e => {
+  if (!mobileNavOpen) return;
+  const drawer = document.getElementById('mobileNavDrawer');
+  const btn    = document.getElementById('hamburgerBtn');
+  if (drawer && !drawer.contains(e.target) && btn && !btn.contains(e.target)) closeMobileNav();
+});
+// ── END MOBILE NAV ──────────────────────────
+
 
 // ── INIT
 checkSession();
