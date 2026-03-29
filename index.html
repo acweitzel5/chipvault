@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -1772,23 +1771,37 @@ document.addEventListener('click', e => {
 
 async function doLogout() {
   await sb.auth.signOut();
+
+  // Reset all state
   currentUser = null;
   currentUsername = null;
-
-  // Hide user pill and close dropdown
-  document.getElementById('userPill').style.display = 'none';
-  document.getElementById('userDropdown').classList.remove('open');
-  document.getElementById('userChevron').classList.remove('open');
-
-  document.getElementById('ownerSelect').value = '';
+  ALL_CHIPS = [];
+  ALL_CASINOS = [];
+  ALL_MEMBERS = [];
+  MY_GROUPS = [];
+  OWNERSHIP = {};
+  OWNER_NAMES = [];
+  activeContext = 'me';
   activeOwner = '';
 
-  // Clear login form
+  // Reset login form to Sign In panel
+  showAuthPanel('panelSignIn');
   document.getElementById('loginEmail').value = '';
   document.getElementById('loginPassword').value = '';
   document.getElementById('loginBtn').disabled = false;
   document.getElementById('loginBtn').textContent = 'Sign In';
   document.getElementById('loginError').classList.remove('show');
+
+  // Close any open UI
+  document.getElementById('userPill').style.display = 'none';
+  document.getElementById('userDropdown').classList.remove('open');
+  document.getElementById('userChevron').classList.remove('open');
+  closeMobileNav();
+
+  // Return to collection view then show login wall
+  const firstTab = document.querySelector('.nav-tab');
+  if (firstTab) showView('collection', firstTab);
+
   showLoginWall();
 }
 
